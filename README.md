@@ -126,3 +126,21 @@ protected $middleware = [
   // ...
 ];
 ```
+
+In Laravel 11.x/12.x `app/HttpKernel.php` has been removed, global configuration goes into `bootstrap/app.php`:
+
+For example:
+
+```php
+return Application::configure(basePath: dirname(__DIR__))
+    // ...
+    ->withMiddleware(function (Middleware $middleware) {
+        // ...
+        $middleware->appendToGroup('api', [
+            \Membrane\Laravel\Middleware\RequestValidation::class,
+            \Membrane\Laravel\Middleware\ResponseJsonFlat::class,
+        ]);
+    })
+    // ...
+    ->create();
+```
